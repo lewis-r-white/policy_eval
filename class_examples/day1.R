@@ -6,11 +6,8 @@ library(ggplot2)
 library(here)
 library(tidyverse)
 
-# PATH TO DIRECTORY WHERE DATA FILE IS LOCATED. MAKE SURE TO ADJUST TO YOUR COMPUTER
-# setwd("C:\\Users\\Olivier Deschenes\\Dropbox\\Econ Desktop\\Teaching\\EDS 241\\Data")
-
 # IMPORT CSV DATA
-HPRICE2 <- read.csv(here("HPRICE2.csv"))
+HPRICE2 <- read.csv(here("data", "HPRICE2.csv"))
 
 
 # SUMMARY STATISTICS
@@ -51,7 +48,9 @@ model3 <- lm(formula = price ~ rooms, data = HPRICE2)
 # HOMOSKEDASTIC ERRORS
 se_ho_model3 = list(summary(model3)$coefficients[,2])
 # HETEROSKEDASTIC ERRORS
-se_he_model3 <- starprep(model3, stat = c("std.error"), se_type = "HC1", alpha = 0.05)
+se_he_model3 <- starprep(model3, stat = c("std.error"), se_type = "HC2", alpha = 0.05)
 #TABLE OF RESULTS
 stargazer(model3, model3, se = c(se_ho_model3, se_he_model3), type="text")
+
+lm_robust(formula = price ~ rooms, data = HPRICE2)
 
